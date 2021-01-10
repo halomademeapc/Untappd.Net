@@ -421,13 +421,7 @@ namespace Untappd.Net
         public string Method { get; set; }
     }
 
-    public class Response
-    {
-        [JsonProperty("beer")]
-        public Beer Beer { get; set; }
-    }
-
-    public class UntappdResponse
+    public class UntappdResponse<TResponse>
     {
         [JsonProperty("meta")]
         public Meta Meta { get; set; }
@@ -436,7 +430,7 @@ namespace Untappd.Net
         public List<object> Notifications { get; set; }
 
         [JsonProperty("response")]
-        public Response Response { get; set; }
+        public TResponse Response { get; set; }
     }
 
     public class ListResult<TItem>
