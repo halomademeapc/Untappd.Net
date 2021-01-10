@@ -2,11 +2,12 @@
 using Newtonsoft.Json;
 using System;
 using System.IO;
+using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 using System.Web;
 
-namespace Untappd.Net
+namespace Untappd.Client
 {
     public class UntappdClient
     {
@@ -20,9 +21,14 @@ namespace Untappd.Net
             this.httpClient.BaseAddress = new Uri(config.BaseUrl);
         }
 
-        private async Task<TResult> GetAsync<TResult>(string path)
+        public Task<UntappdResponse<BeerSearchResponse>> SearchBeers(string query) =>
+            GetAsync<UntappdResponse<BeerSearchResponse>>($"search/beer?q={query}");
+
+        private async Task<TResult> GetAsync<TResult>(FormattableString path)
         {
-            using (var request = new HttpRequestMessage(HttpMethod.Post, AddAuthorization(path)))
+            var interpolatedPath = string.Format(path.Format, path.GetArguments().Select(a => HttpUtility.UrlEncode(a?.ToString())).ToArray());
+
+            using (var request = new HttpRequestMessage(HttpMethod.Post, AddAuthorization(interpolatedPath)))
             using (var res = await httpClient.SendAsync(request, HttpCompletionOption.ResponseHeadersRead))
             {
                 if (!res.IsSuccessStatusCode)
@@ -48,18 +54,12 @@ namespace Untappd.Net
 
         private string AddAuthorization(string path)
         {
-            var builder = new UriBuilder(new Uri(path, UriKind.Relative));
+            var builder = new UriBuilder(new Uri(Path.Combine(config.BaseUrl, path)));
             var query = HttpUtility.ParseQueryString(builder.Query);
             query["client_id"] = config.ClientId;
             query["client_secret"] = config.ClientSecret;
             builder.Query = query.ToString();
             return builder.ToString();
         }
-    }
-    public class UntappdConfig
-    {
-        public string ClientId { get; set; }
-        public string ClientSecret { get; set; }
-        public string BaseUrl { get; set; } = "https://api.untappd.com/v4/";
     }
 }

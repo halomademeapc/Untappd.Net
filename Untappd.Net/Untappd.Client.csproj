@@ -1,0 +1,26 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <Version>0.1.0</Version>
+    <Authors>Alex Griffith</Authors>
+    <Description>.NET Standard client for Untappd API</Description>
+    <RepositoryUrl>https://github.com/halomademeapc/Untappd.Net</RepositoryUrl>
+    <PackageTags>Untappd beer</PackageTags>
+    <PackageReleaseNotes>Initial release; only beer search is currently supported</PackageReleaseNotes>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <PackageId>Untappd.Client</PackageId>
+    <Product>Untappd.Client</Product>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Folder Include="NewFolder\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Extensions.Options" Version="3.1.0" />
+    <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
+  </ItemGroup>
+
+</Project>
